@@ -30,5 +30,9 @@ app.get(
   })
 );
 
+// send request to google with 'code' included
+// Google sees 'code' in URL, replies with details about user
+app.get('/auth/google/callback', passport.authenticate('google'));
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
