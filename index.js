@@ -22,5 +22,13 @@ passport.use(
   )
 );
 
+// route handler
+app.get(
+  '/auth/google',
+  passport.authenticate('google', {
+    scope: ['profile', 'email']
+  })
+);
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
