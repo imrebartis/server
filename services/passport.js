@@ -22,9 +22,16 @@ passport.use(
       User.findOne({ googleId: profile.id }).then(existingUser => {
         if (existingUser) {
           // we already have a record with the given profile ID
+
+          // first arg is for err message (in this case null)
+          done(null, existingUser);
         } else {
           // we don't have a user record with this ID, make a new record!
-          new User({ googleId: profile.id }).save();
+
+          // saving a record to db is an asynchronous operation
+          new User({ googleId: profile.id })
+            .save()
+            .then(user => done(null, user));
         }
       });
     }
