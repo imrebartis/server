@@ -13,4 +13,9 @@ module.exports = app => {
   // send request to google with 'code' included
   // Google sees 'code' in URL, replies with details about user
   app.get('/auth/google/callback', passport.authenticate('google'));
+
+  // auth handler
+  app.get('/api/current_user', (req, res) => {
+    res.send(req.user);
+  });
 };
