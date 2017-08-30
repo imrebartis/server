@@ -5,6 +5,18 @@ const keys = require('../config/keys');
 
 const User = mongoose.model('users');
 
+passport.serializeUser((user, done) => {
+  // use the id property provided in the db instead of googleId
+  // in case there'll be other auth providers (fb, twitter, etc.) in the app, too
+  done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+  User.findById(id).then(user => {
+    done(null, user);
+  });
+});
+
 passport.use(
   new GoogleStrategy(
     {
