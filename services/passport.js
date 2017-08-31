@@ -23,7 +23,9 @@ passport.use(
       clientID: keys.googleClientID,
       clientSecret: keys.googleClientSecret,
       // the route users will be sent to after they grant permission to the authentication
-      callbackURL: '/auth/google/callback'
+      callbackURL: '/auth/google/callback',
+      // if app runs into any proxy (e.g. Heroku's), that's fine
+      proxy: true
     },
     (accessToken, refreshToken, profile, done) => {
       // console.log('access token', accessToken);
