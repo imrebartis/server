@@ -27,27 +27,18 @@ passport.use(
       // if app runs into any proxy (e.g. Heroku's), that's fine
       proxy: true
     },
-    (accessToken, refreshToken, profile, done) => {
-      // console.log('access token', accessToken);
-      // console.log('refresh token', refreshToken);
-      // console.log('profile:', profile);
+    async (accessToken, refreshToken, profile, done) => {
+      const existingUser = await User.findOne({ googleId: profile.id });
 
-      // this returns a promise
-      User.findOne({ googleId: profile.id }).then(existingUser => {
-        if (existingUser) {
-          // we already have a record with the given profile ID
-
-          // first arg is for err message (in this case null)
-          done(null, existingUser);
-        } else {
-          // we don't have a user record with this ID, make a new record!
-
-          // saving a record to db is an asynchronous operation
-          new User({ googleId: profile.id })
-            .save()
-            .then(user => done(null, user));
-        }
-      });
+      if (existingUser) {
+        // we already have a record with the given profile ID
+        // first arg is for err message (in this case null)
+        return done(null, existingUser);
+      }
+      // we don't have a user record with this ID, make a new record!
+      // saving a record to db is an asynchronous operation
+      const user = await new User({ googleId: profile.id }).save();
+      done(null, user);
     }
   )
 );
