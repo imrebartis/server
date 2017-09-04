@@ -8,7 +8,15 @@ const Landing = () => <h2>Landing</h2>;
 
 //functional component
 const App = () => {
-  return <div>Hi There!</div>;
+  return (
+    <div>
+      <BrowserRouter>
+        <div>
+          <Route path="/" component={Landing} />
+        </div>
+      </BrowserRouter>
+    </div>
+  );
 };
 
 export default App;
