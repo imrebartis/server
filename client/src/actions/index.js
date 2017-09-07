@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { FETCH_USER } from './types';
 
-const fetchUser = () => {
+export const fetchUser = () => {
   // the dispatch function will automatically forward all the actions passed in to the different reducers
   // AFTER the get current user api request has been completed
   return function(dispatch) {
