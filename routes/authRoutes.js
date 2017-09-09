@@ -12,11 +12,18 @@ module.exports = app => {
 
   // send request to google with 'code' included
   // Google sees 'code' in URL, replies with details about user
-  app.get('/auth/google/callback', passport.authenticate('google'));
+  // then user's redirected to /surveys route
+  app.get(
+    '/auth/google/callback',
+    passport.authenticate('google'),
+    (req, res) => {
+      res.redirect('/surveys');
+    }
+  );
 
   app.get('/api/logout', (req, res) => {
     req.logout();
-    res.send(req.user);
+    res.redirect('/');
   });
 
   // auth handler
