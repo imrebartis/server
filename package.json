@@ -12,8 +12,6 @@
     "server": "nodemon index.js",
     "client": "npm run start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    // install all dev dependencies of the client folder in heroku
-    // & make sure that npm run build will be run in the client folder in heroku
     "heroku-postbuild":
       "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
