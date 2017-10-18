@@ -2,13 +2,21 @@
 import React, { Component } from 'react';
 // Field will help us render any type of html element that collects input from users
 import { reduxForm, Field } from 'redux-form';
+import SurveyField from './SurveyField';
 
 class SurveyForm extends Component {
+  renderFields() {
+    return (
+      <div>
+        <Field type="text" name="title" component={SurveyField} />
+      </div>
+    )
+  }
   render() {
     return (
       <div>
         <form onSubmit={this.props.handleSubmit(values => console.log(values))}>
-          <Field component="input" type="text" name="SurveyTitle" />
+            {this.renderFields()}
           <button type="submit">Submit</button>
         </form>
       </div>
