@@ -1,10 +1,12 @@
 // SurveyFormReview shows users their form inputs for review
+// import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
+import formFields from './formFields';
 
 // SurveyFormReview shows users their form inputs for review
 
-const SurveyFormReview = ({ onCancel }) => {
+const SurveyFormReview = ({ onCancel, formValues }) => {
     return (
       <div>
         <h5>Please confirm your entries</h5>
