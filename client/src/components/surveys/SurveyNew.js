@@ -1,5 +1,6 @@
 // SurveyNew shows SurveyForm and SurveyFormReview
 import React, { Component } from 'react';
+import { reduxForm } from 'redux-form';
 import SurveyForm from './SurveyForm';
 import SurveyFormReview from './SurveyFormReview';
 
@@ -30,4 +31,13 @@ class SurveyNew extends Component {
   }
 }
 
-export default SurveyNew;
+// if SurveyNew is
+// unmounted, clear the values from
+// SurveyForm and SurveyFormReview
+// (meaning if u cancel the form
+// you were editing, u can add
+// a new form that doesn't contain
+// the values from the cancelled form):
+export default reduxForm({
+  form: 'surveyForm'
+})(SurveyNew);
