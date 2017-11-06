@@ -17,7 +17,7 @@ module.exports = app => {
   app.post('/api/surveys/webhooks', (req, res) => {
     const p = new Path('/api/surveys/:surveyId/:choice');
 
-    const events = _chain(req.body)
+    _chain(req.body)
       .map(({ email, url }) => {
         // extract only the route (e.g. '/api/surveys/5917/yes'):
         const match = p.test(new URL(url).pathname);      
@@ -30,9 +30,24 @@ module.exports = app => {
       //insuring there'll be no duplicate emails or survey ids (e.g. if someone clicks the survey link
       // several times:
       .uniqBy('email', 'surveyId')
+      .each(({ surveyId, email, choice }) => {
+        // Mongo code (hence e.g. the use of _id):
+        Survey.updateOne(
+          {
+            _id: surveyId,
+            recipients: {
+              $elemMatch: { email: email, responded: false }
+            }
+          },
+          {
+            // choice is not an array here,
+            // it just stands for the 'yes' or 'no' from the survey
+            $inc: { [choice]: 1 },
+            $set: { 'recipients.$.responded': true }
+          }
+        ).exec();
+      })
       .value();
-
-    console.log(events);
 
     res.send({});
 });
