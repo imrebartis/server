@@ -24,14 +24,16 @@ module.exports = app => {
       if (match) {
         return { email, surveyId: match.surveyId, choice: match.choice };
       }
-  });
- 
-  const compactEvents = _.compact(events);
-  const uniqueEvents = _.uniqBy(compactEvents, 'email', 'surveyId');
+    })
+    //compactEvents will return only event objects (& not undefined elements):
+    const compactEvents = _.compact(events);
+    //insuring there'll be no duplicate emails or survey ids (e.g. if someone clicks the survey link
+    // several times:
+    const uniqueEvents = _.uniqBy(compactEvents, 'email', 'surveyId');
 
-  console.log(uniqueEvents);
+    console.log(uniqueEvents);
 
-  res.send({});
+    res.send({});
 });
 
   app.post('/api/surveys', requireLogin, requireCredits, async (req, res) => {
