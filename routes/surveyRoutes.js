@@ -15,23 +15,24 @@ module.exports = app => {
   });
 
   app.post('/api/surveys/webhooks', (req, res) => {
-    // req.body = list of events
-    const events = _.map(req.body, ({ email, url }) => {
-      // extract only the route (e.g. '/api/surveys/5917/yes'):
-      const pathname = new URL(url).pathname;
-      const p = new Path('/api/surveys/:surveyId/:choice');
-      const match = p.test(pathname);      
-      if (match) {
-        return { email, surveyId: match.surveyId, choice: match.choice };
-      }
-    })
-    //compactEvents will return only event objects (& not undefined elements):
-    const compactEvents = _.compact(events);
-    //insuring there'll be no duplicate emails or survey ids (e.g. if someone clicks the survey link
-    // several times:
-    const uniqueEvents = _.uniqBy(compactEvents, 'email', 'surveyId');
+    const p = new Path('/api/surveys/:surveyId/:choice');
 
-    console.log(uniqueEvents);
+    const events = _chain(req.body)
+      .map(({ email, url }) => {
+        // extract only the route (e.g. '/api/surveys/5917/yes'):
+        const match = p.test(new URL(url).pathname);      
+        if (match) {
+          return { email, surveyId: match.surveyId, choice: match.choice };
+        }
+      })
+      //this will return only event objects (& not undefined elements):
+      .compact()
+      //insuring there'll be no duplicate emails or survey ids (e.g. if someone clicks the survey link
+      // several times:
+      .uniqBy('email', 'surveyId')
+      .value();
+
+    console.log(events);
 
     res.send({});
 });
